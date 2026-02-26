@@ -1,0 +1,16 @@
+# Compiled class files
+*.class
+
+# NetBeans
+nbproject/private/
+nbproject/build/
+nbproject/.nb-gradle/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
