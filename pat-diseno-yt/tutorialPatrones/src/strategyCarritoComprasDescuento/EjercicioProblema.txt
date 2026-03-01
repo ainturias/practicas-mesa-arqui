@@ -1,0 +1,86 @@
+🛒 Problema: Carrito de Compras con Descuentos
+Tienes una tienda online con un carrito de compras. El carrito tiene productos y un precio total.
+Dependiendo de la temporada o promoción activa, el descuento se calcula de forma diferente:
+
+    Tipo de descuento          Cómo funciona
+    ─────────────────────────────────────────────────────────────────
+    Sin descuento              Retorna 0 (no hay descuento)
+    Porcentaje                 Descuenta un % del total (ej: 15% de $200 = $30 de descuento)
+    Monto fijo                 Descuenta una cantidad fija (ej: siempre $50 de descuento)
+
+Sin el patrón Strategy, meterías todo en un montón de if-else dentro del carrito:
+
+    si (tipo == "sinDescuento") {
+        descuento = 0;
+    } else si (tipo == "porcentaje") {
+        descuento = total * 0.15;
+    } else si (tipo == "fijo") {
+        descuento = 50;
+    }
+
+Y si mañana te piden otro tipo de descuento (2x1, descuento por cliente VIP, etc.),
+tienes que ir a modificar esa misma clase. 😬
+
+-----------------------------------------------------------------------------------------------------------
+
+💡 Solución con Strategy
+Siguiendo la estructura de refactoring.guru:
+
+1. Interfaz Strategy → DescuentoStrategy
+   - Método: double calcularDescuento(double totalCompra)
+   - NOTA: ahora el método RETORNA un double, no es void. Esto es nuevo respecto al ejemplo anterior.
+
+2. Estrategias Concretas (cada una implementa la interfaz):
+   - SinDescuento         → siempre retorna 0
+   - DescuentoPorcentaje  → recibe un porcentaje en su CONSTRUCTOR (ej: 0.15 para 15%),
+                             y retorna totalCompra * porcentaje
+   - DescuentoFijo        → recibe un monto fijo en su CONSTRUCTOR (ej: 50),
+                             y retorna ese monto
+
+   LO NUEVO: las estrategias concretas tienen ATRIBUTOS PROPIOS (el porcentaje o el monto fijo).
+   Esto es normal y válido — cada estrategia puede guardar la configuración que necesite.
+
+3. Contexto → CarritoCompras
+   - Tiene un atributo double total (el precio total del carrito)
+   - Tiene la referencia a DescuentoStrategy
+   - Tiene un método agregarProducto(String nombre, double precio) que suma al total
+   - Tiene un método calcularTotal() que:
+       1. Llama a la estrategia para obtener el descuento
+       2. Resta el descuento del total
+       3. Imprime el total original, el descuento, y el total final
+
+4. Cliente → TestCarrito (tu main)
+   - Crea un carrito
+   - Agrega productos
+   - Calcula el total SIN descuento
+   - Cambia la estrategia a PORCENTAJE del 20%
+   - Calcula de nuevo
+   - Cambia a DESCUENTO FIJO de $50
+   - Calcula de nuevo
+
+-----------------------------------------------------------------------------------------------------------
+
+📁 Archivos a crear en este paquete (strategyCarritoComprasDescuento):
+
+    Archivo                        Rol                 ¿Qué tiene de nuevo?
+    ───────────────────────────────────────────────────────────────────────────────
+    DescuentoStrategy.java         Interfaz            Método que RETORNA double
+    SinDescuento.java              Concreta            La más simple
+    DescuentoPorcentaje.java       Concreta            Tiene un ATRIBUTO PROPIO (porcentaje)
+    DescuentoFijo.java             Concreta            Tiene un ATRIBUTO PROPIO (montoFijo)
+    CarritoCompras.java            Contexto            Tiene ESTADO PROPIO (total) además de la estrategia
+    TestCarrito.java               Cliente             Demuestra el cambio de estrategia
+
+-----------------------------------------------------------------------------------------------------------
+
+🔑 Lo que vas a aprender de nuevo con este ejercicio:
+
+1. Las estrategias pueden tener ATRIBUTOS PROPIOS
+   → DescuentoPorcentaje guarda su porcentaje, DescuentoFijo guarda su monto.
+
+2. El método de la interfaz puede RETORNAR valores, no solo imprimir.
+   → Esto es más realista.
+
+3. El Contexto puede tener ESTADO PROPIO (los productos y el total) además de la referencia
+   a la estrategia.
+   → La estrategia COMPLEMENTA al contexto, no lo reemplaza.

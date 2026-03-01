@@ -1,0 +1,74 @@
+🎯 Problema: Sistema de Notificaciones
+Imagínate que estás construyendo una aplicación que necesita enviar notificaciones a los usuarios. 
+Al principio solo necesitas enviar notificaciones por correo electrónico. Pero con el tiempo, te piden que también se puedan enviar por SMS y por WhatsApp.
+
+Sin el patrón Strategy, lo que harías es meter todo en una sola clase con un montón de if-else:
+
+si (tipo == "email") {
+    // lógica para enviar email
+} else si (tipo == "sms") {
+    // lógica para enviar sms  
+} else si (tipo == "whatsapp") {
+    // lógica para enviar whatsapp
+}
+Esto se vuelve un desastre porque cada vez que agregas un nuevo tipo de notificación, tienes que modificar esa clase. 
+Y si mañana te piden agregar Telegram, tienes que ir a esa misma clase y meter otro else if. 😬
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+💡 Solución con Strategy
+Siguiendo la estructura de refactoring.guru:
+
+1. Interfaz Strategy → NotificacionStrategy
+Declara un método común, por ejemplo: enviar(String destinatario, String mensaje)
+Todas las estrategias concretas deben implementar este método.
+
+2. Estrategias Concretas (cada una implementa la interfaz):
+NotificacionEmail → imprime algo como: "Enviando EMAIL a [destinatario]: [mensaje]"
+NotificacionSMS → imprime algo como: "Enviando SMS a [destinatario]: [mensaje]"
+NotificacionWhatsApp → imprime algo como: "Enviando WhatsApp a [destinatario]: [mensaje]"
+
+3. Contexto → ServicioNotificacion
+Tiene una referencia a un objeto de tipo NotificacionStrategy (la interfaz).
+Tiene un setter (setStrategy) para poder cambiar la estrategia en tiempo de ejecución.
+Tiene un método como notificar(String destinatario, String mensaje) que simplemente delega el trabajo a la estrategia actual.
+
+4. Cliente → TestNotificacion (tu main)
+Crea el objeto Contexto (ServicioNotificacion).
+Le asigna una estrategia concreta (por ejemplo, NotificacionEmail).
+Llama a notificar(...).
+Cambia la estrategia (por ejemplo, a NotificacionSMS) usando el setter.
+Vuelve a llamar a notificar(...) y ahora se envía por SMS.
+Cambia a NotificacionWhatsApp, llama de nuevo, y se envía por WhatsApp.
+
+====================================================================================================
+💡 Tips para los nombres (para que no te tardes tanto)
+1. La interfaz siempre describe "qué se hace", no "quién lo hace". Ejemplos:
+
+    NotificacionStrategy       ✅ (describes la acción)
+    EstrategiaDeNotificacion   ✅ (también válido)
+
+2. Las clases concretas = Interfaz + Variante:
+
+    NotificacionEmail, NotificacionSms, NotificacionWhatsapp ✅
+    Patrón: [Sustantivo][Variante]
+
+3. El Contexto se llama según lo que "es" en el negocio:
+
+    ServicioNotificacion     ✅ porque es el servicio que maneja notificaciones
+
+4. El Test siempre: Test + nombre del patrón o funcionalidad:
+
+    TestNotificacion ✅
+
+Tip rápido: No busques nombres perfectos. Si describes qué hace en 1-2 palabras, ya está bien. Los nombres los puedes renombrar después. No te paralices.
+
+Para futuros ejercicios, sigue esta fórmula:
+
+Pieza	      Fórmula del nombre
+Interfaz	  [Acción]Strategy        ->siempre describe "qué se hace"
+Concretas	  [Acción][Variante]      
+Contexto	  [Servicio/Entidad que usa la estrategia] ->se llama según lo que "es" en el negocio
+Test	      Test[NombreDelContexto] 
+
+
+
+
