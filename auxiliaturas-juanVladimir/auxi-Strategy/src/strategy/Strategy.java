@@ -1,4 +1,4 @@
-package patterns;
+package strategy;
 
 public interface Strategy {
 

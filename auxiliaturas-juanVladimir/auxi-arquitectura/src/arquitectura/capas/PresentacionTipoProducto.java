@@ -1,15 +1,58 @@
-
 package arquitectura.capas;
+
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.table.DefaultTableModel;
+
 
 public class PresentacionTipoProducto extends javax.swing.JFrame {
 
     private NegocioTipoProducto negocioTipoProducto;
-    
+
     public PresentacionTipoProducto() {
         initComponents();
-        
+
         negocioTipoProducto = new NegocioTipoProducto();
+
+    }
+
+    // Esto sirve para limpiar
+    private void nuevo() {
+        jTextField1.setText("");
+        jTextField2.setText("");
+    }
+
+    private void listar() {
+        Map<String, Object[]> datas = negocioTipoProducto.listar();
+
+        DefaultTableModel dt = (DefaultTableModel) jTable1.getModel();
+        dt.setRowCount(0);
         
+        for (Map.Entry<String, Object[]> entry : datas.entrySet()) {
+            Object[] value = entry.getValue();
+            dt.addRow(value);
+        }
+    }
+
+    // esto es solamente para capturar información del formulario
+    private Map<String, Object> leerDatos() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("id", jTextField1.getText());
+        data.put("descripcion", jTextField2.getText());
+        
+        return data;
+    }
+
+    private void mostrarDatos(Object[] resultado) {
+        jTextField1.setText(resultado[0].toString());
+        jTextField2.setText(resultado[1].toString());
+    }
+
+    private void guardar() {
+        Map<String, Object> data = leerDatos();
+        negocioTipoProducto.cargarDatos(data);
+        Object[] resultado = negocioTipoProducto.guardar();
+        mostrarDatos(resultado);
     }
 
     /**
@@ -47,12 +90,27 @@ public class PresentacionTipoProducto extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jButton1.setText("guardar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jButton2.setText("nuevo");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jButton3.setText("listar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -112,6 +170,18 @@ public class PresentacionTipoProducto extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        nuevo();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        listar();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       guardar();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -158,4 +228,5 @@ public class PresentacionTipoProducto extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
+
 }

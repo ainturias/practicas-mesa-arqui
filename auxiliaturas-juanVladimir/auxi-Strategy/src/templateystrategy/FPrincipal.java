@@ -1,4 +1,4 @@
-package patterns;
+package templateystrategy;
 
 public class FPrincipal extends javax.swing.JFrame {
 
@@ -15,7 +15,6 @@ public class FPrincipal extends javax.swing.JFrame {
     // Asignamos o seteamos al contexto que estrategia se va a aplicar
     public String generarSerie(int n, String strategy) {
 
-        // siempre vamos a colocar un switch
         switch (strategy) {
             case "Serie A":
                 contexStrategy.setStrategy(new SerieA());
@@ -23,16 +22,11 @@ public class FPrincipal extends javax.swing.JFrame {
             case "Serie B":
                 contexStrategy.setStrategy(new SerieB());
                 break;
-            case "Serie C":
-                contexStrategy.setStrategy(new SerieC());
-                break;
             default:
                 throw new AssertionError();
         }
-
         // ejecutamos el algoritmo de la estrategia
-        return contexStrategy.ejecutarStrategy(n);
-
+        return contexStrategy.generarSerie(n);
     }
 
     /**
