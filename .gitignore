@@ -6,6 +6,10 @@ nbproject/
 build/
 manifest.mf
 
+# Archivos locales
+modelos-examenes-img/
+nul
+
 # IDE
 .idea/
 *.iml
