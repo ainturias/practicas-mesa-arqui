@@ -2,9 +2,9 @@
 *.class
 
 # NetBeans
-nbproject/private/
-nbproject/build/
-nbproject/.nb-gradle/
+nbproject/
+build/
+manifest.mf
 
 # IDE
 .idea/

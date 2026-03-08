@@ -1,6 +1,0 @@
-Pregunta 32
-Diseñar 3 capas y codificar el caso de uso registrar persona con los siguientes datos:
-
-Persona (id, nombre completo, nacionalidad, fecha de nacimiento) si la persona es de Bolivia que muestre la fecha en el siguiente formato (dd-mm-aaa) 
-y si la persona es de EEUU el formato de (mm-dd-aaaa). Ademas al momento de registrar el nombre de la persona, que guarde en memoria los cambios 
-ealizados, es decir, pueda hacer y deshacer
